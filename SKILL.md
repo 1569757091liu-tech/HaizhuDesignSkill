@@ -1,37 +1,87 @@
 ---
 name: haizhu-design-skill
-description: A design-engineering skill for building distinctive, production-ready frontend interfaces. It orchestrates Taste Skill, Impeccable, shadcn, UI UX Pro Max, and Design MD Collection, then selects relevant motion/UI resources from Motion Sites, React Bits, Uiverse, Anime.js, and Aceternity UI. Use when the user asks to design, redesign, prototype, implement, polish, animate, or review a web UI/frontend.
+description: A design-engineering skill for building distinctive, production-ready frontend interfaces. It orchestrates Taste Skill, Impeccable, shadcn, UI UX Pro Max, and Design MD Collection, then routes relevant motion/UI references from Motion Sites, React Bits, Uiverse, Anime.js, and Aceternity UI. Use when the user asks to design, redesign, prototype, implement, polish, animate, or review a web UI/frontend.
 ---
 
 # Haizhu Design Skill
 
 ## Mission
 
-Turn an ambiguous frontend request into a coherent design direction, an implementable UI system, and production-oriented React/Next.js code. Avoid generic AI-generated UI. Prefer a small number of strong visual decisions over decorative effects.
+Turn an ambiguous frontend request into a coherent design direction, implementable UI system, and production-oriented React/Next.js code. Avoid generic AI-generated UI. Prefer a small number of strong visual decisions over decorative effects.
 
-## Core orchestration
+## Architecture
 
-Five design tools form the primary pipeline:
+```text
+User brief
+  ↓
+Brief classifier
+  ↓
+Core design adapters
+  ├─ Taste
+  ├─ UI UX Pro Max
+  ├─ Design MD
+  ├─ Impeccable
+  └─ shadcn
+  ↓
+Problem classification
+  ↓
+Supporting resource router
+  ├─ Motion Sites
+  ├─ React Bits
+  ├─ Uiverse
+  ├─ Anime.js
+  └─ Aceternity UI
+  ↓
+Semantic prompt extraction
+  ↓
+Project-native implementation
+  ↓
+QA + refinement
+```
 
-1. **Taste Skill** — establish visual direction, anti-slop constraints, hierarchy, typography, spacing, color, and motion taste.
-2. **Impeccable** — audit/refine visual quality, layout, hierarchy, accessibility, responsive behavior, and polish.
-3. **shadcn** — provide accessible, composable, source-owned UI primitives and implementation patterns.
-4. **UI UX Pro Max** — generate/validate practical UX, UI patterns, design-system decisions, and implementation guidance.
-5. **Design MD Collection** — use as a design-spec/reference layer for turning visual intent into structured implementation guidance.
+Adapter contracts live in `adapters/`. Routing guidance lives in `references/adapter-routing.md`.
 
-The five tools are complementary, not interchangeable. Do not ask every tool to solve the same problem.
+## Core adapters
 
-## Resource selection layer
+### Taste Skill
+Establish visual direction, anti-slop constraints, hierarchy, typography, spacing, color, surface language, and motion taste.
 
-When the user needs advanced interaction, motion, or distinctive components, select only the relevant resources:
+### UI UX Pro Max
+Solve product UX, information architecture, page patterns, interaction models, responsive strategy, and design-system decisions.
 
-- **Motion Sites** → motion language, interaction choreography, scroll/hover/page-transition inspiration, and motion prompt vocabulary.
-- **React Bits** → React-native animated components/backgrounds and implementation patterns.
-- **Uiverse** → lightweight UI element ideas and interaction variants; adapt rather than blindly copy.
-- **Anime.js** → timeline-based or fine-grained JavaScript animation when CSS/React transitions are insufficient.
-- **Aceternity UI** → premium-feeling animated React patterns such as hero effects, spotlight/glow, parallax, beams, cards, and scroll reveals.
+### Design MD Collection
+Turn visual intent into structured specifications: tokens, page anatomy, components, states, responsive rules, and implementation notes.
 
-Use these as a relevance-matched reference layer, not as a requirement to add animation everywhere.
+### Impeccable
+Audit and refine the result. Prioritize fixes by user impact rather than redesigning everything.
+
+### shadcn
+Translate approved decisions into accessible, composable, project-owned primitives. Component defaults must not determine the product identity.
+
+## Supporting resource adapters
+
+Use only when the current UI problem warrants them.
+
+- **Motion Sites** → motion language and choreography.
+- **React Bits** → React-native animated component patterns.
+- **Uiverse** → small UI elements and micro-interactions.
+- **Anime.js** → precise JavaScript timelines and coordinated sequences.
+- **Aceternity UI** → high-impact animated React patterns for focal/showcase surfaces.
+
+## Adapter selection protocol
+
+For every request, classify the problem before selecting a resource.
+
+1. Identify the user's primary goal.
+2. Determine whether the problem is visual, UX, structural, component-level, motion, or polish.
+3. Select the minimum core adapters needed.
+4. Select supporting adapters only for unresolved UI problems.
+5. Score candidates from 0–3 for semantic, visual, implementation, performance, and accessibility fit.
+6. Keep the smallest set that sufficiently solves the problem.
+7. Translate external references into project-native guidance.
+8. Reject references that conflict with the design system, accessibility, performance, or product goal.
+
+Never select a resource solely because the user mentioned its library.
 
 ## Execution protocol
 
@@ -48,13 +98,11 @@ Extract:
 - interaction/motion requirements
 - accessibility/performance constraints
 
-If critical information is missing, infer conservatively and state the assumptions internally before implementation.
+Infer conservatively when non-critical information is missing.
 
-### Phase 1 — Establish the design direction
+### Phase 1 — Establish design direction
 
-Run the conceptual responsibilities of Taste Skill + UI UX Pro Max + Design MD Collection.
-
-Produce a compact design brief containing:
+Use Taste + UI UX Pro Max + Design MD responsibilities to define:
 - visual concept
 - typography roles
 - color strategy
@@ -65,60 +113,51 @@ Produce a compact design brief containing:
 - interaction principles
 - motion principles
 - responsive behavior
-- explicit anti-patterns to avoid
+- anti-patterns to avoid
 
 Do not start by selecting random components.
 
 ### Phase 2 — UX and visual audit
 
-Use Impeccable-style review questions:
+Use Impeccable-style questions:
 - Is the primary action obvious?
 - Does hierarchy survive a 3-second scan?
 - Are density and whitespace intentional?
 - Are typography and contrast legible?
-- Are repeated patterns actually consistent?
+- Are repeated patterns consistent?
 - Does the design work at mobile/tablet/desktop widths?
-- Are states covered: loading, empty, error, disabled, hover, focus, success?
+- Are loading, empty, error, disabled, hover, focus, and success states covered?
 - Does motion communicate state or hierarchy rather than decoration?
 
 ### Phase 3 — Build the system
 
-Use shadcn principles for implementation:
-- prefer accessible primitives
-- keep component ownership in the project
-- use design tokens/CSS variables where practical
-- compose primitives instead of creating one-off markup
-- preserve keyboard/focus behavior
-- avoid unnecessary dependencies
+Use shadcn principles:
+- accessible primitives
+- project-owned components
+- design tokens/CSS variables
+- composition over one-off markup
+- keyboard/focus behavior
+- minimal dependencies
 
-Map design decisions into:
-- tokens
-- primitives
-- composed components
-- sections
-- page templates
+Map decisions into tokens → primitives → composed components → sections → templates.
 
-### Phase 4 — Select supporting resources
+### Phase 4 — Resource routing
 
-Classify the request before selecting resources.
-
-| Need | Primary resource | Secondary resource |
+| Need | Primary | Secondary |
 |---|---|---|
 | Hero motion | Motion Sites | Aceternity UI / React Bits |
-| Scroll reveal | Motion Sites | React Bits / Anime.js |
+| Scroll choreography | Motion Sites | React Bits / Anime.js |
 | Magnetic/cursor interaction | React Bits | Anime.js |
-| Decorative UI element | Uiverse | shadcn |
-| High-impact landing-page effect | Aceternity UI | React Bits |
-| Complex animation timeline | Anime.js | React Bits |
+| Micro UI element | Uiverse | shadcn |
+| High-impact landing effect | Aceternity UI | React Bits |
+| Complex timeline | Anime.js | React Bits |
 | Standard form/dialog/table | shadcn | UI UX Pro Max |
-| Visual redesign | Taste Skill | Impeccable |
+| Visual redesign | Taste | Impeccable |
 | UX-heavy product flow | UI UX Pro Max | Impeccable |
 
-### Phase 5 — Convert references into prompts
+### Phase 5 — Extract semantic prompts
 
-Do not dump a library's entire component catalog into the model context. Extract only the semantic attributes needed for the current task.
-
-For each selected reference, convert it into a **design implementation prompt** with:
+For every selected external reference, output only:
 - intent
 - target element
 - visual behavior
@@ -128,21 +167,21 @@ For each selected reference, convert it into a **design implementation prompt** 
 - accessibility fallback
 - implementation preference
 
+Do not reproduce large portions of third-party source code or proprietary prompt collections.
+
 Example:
 
-> Use a restrained spotlight interaction for the hero card: pointer proximity subtly shifts the radial highlight, opacity remains low, the card content does not move, and `prefers-reduced-motion` disables the effect. Implement with CSS variables or a lightweight React pointer handler; do not add a heavy animation dependency.
-
-This is preferable to copying a component description verbatim.
+> Use a restrained spotlight interaction for the hero card. Pointer proximity subtly shifts a low-opacity radial highlight while content remains stable. Disable the effect under `prefers-reduced-motion`. Prefer CSS variables or a lightweight pointer handler over a new animation dependency.
 
 ### Phase 6 — Implement
 
-Default frontend target:
+Default target:
 - React + TypeScript
-- Next.js when the project indicates it
+- Next.js when indicated
 - Tailwind CSS when already present
 - shadcn/ui when appropriate
 
-Implementation priorities:
+Priority:
 1. semantic structure
 2. responsive layout
 3. accessibility
@@ -153,57 +192,47 @@ Implementation priorities:
 
 ### Phase 7 — Quality gate
 
-Before declaring completion, verify:
-- no generic/template-looking sections unless explicitly requested
+Verify:
+- no generic/template-looking sections unless requested
 - no excessive gradients/glows/cards
 - no gratuitous animation
 - no broken responsive layout
 - no inaccessible contrast or focus states
-- no missing loading/empty/error states for interactive product UI
+- no missing product states
 - no animation that blocks task completion
 - reduced-motion behavior exists where motion is meaningful
-- component reuse is sensible
-- code is understandable and maintainable
+- sensible component reuse
+- maintainable code
 
 ## Motion rules
 
-Motion should have a job. Classify it as:
-- **Orientation** — reveals hierarchy or establishes context.
-- **Feedback** — confirms an action or state change.
-- **Continuity** — connects related states or locations.
-- **Emphasis** — directs attention to a meaningful moment.
-- **Atmosphere** — optional; use sparingly.
+Motion must have a job:
+- **Orientation** — establishes context or hierarchy.
+- **Feedback** — confirms an action/state change.
+- **Continuity** — connects related states.
+- **Emphasis** — directs attention.
+- **Atmosphere** — optional and sparse.
 
-Prefer subtle, composable motion. Avoid stacking parallax + cursor effects + glow + blur + text animation on the same viewport unless the brief explicitly calls for an experimental showcase.
-
-## Resource relevance scoring
-
-When multiple references could apply, score each candidate from 0–3 on:
-- semantic fit
-- visual fit
-- implementation fit
-- performance fit
-- accessibility fit
-
-Select the smallest set whose combined score is sufficient. Default to 1–3 references per UI problem.
+Prefer subtle, composable motion. Avoid stacking parallax + cursor effects + glow + blur + text animation in one viewport unless the brief explicitly calls for an experimental showcase.
 
 ## Output contract
 
-When producing a design/implementation plan, return:
-1. **Design direction**
-2. **UX structure**
-3. **Component/system map**
-4. **Selected references and why**
-5. **Motion plan**
-6. **Implementation plan**
-7. **Quality checklist**
+For a design/implementation plan return:
+1. Design direction
+2. UX structure
+3. Component/system map
+4. Selected adapters/references and why
+5. Motion plan
+6. Implementation plan
+7. Quality checklist
 
-When implementing directly, keep the reasoning compact and prioritize working code.
+When implementing directly, keep reasoning compact and prioritize working code.
 
-## Important constraints
+## Hard constraints
 
-- Do not reproduce large portions of third-party source code or proprietary prompt libraries.
-- Prefer attribution/linking and semantic adaptation when referencing external resources.
-- Never select a component only because it looks impressive.
-- Never let a component library determine the product's visual identity.
-- The design system comes first; components serve the system.
+- Design system first, components second.
+- Never let a component library determine visual identity.
+- Never add animation without a purpose.
+- Preserve accessibility and reduced-motion behavior.
+- Prefer existing project dependencies over new ones.
+- Adapt external references instead of blindly copying them.
