@@ -9,37 +9,41 @@ description: A design-engineering skill for building distinctive, production-rea
 
 Turn an ambiguous frontend request into a coherent design direction, implementable UI system, and production-oriented React/Next.js code. Avoid generic AI-generated UI. Prefer a small number of strong visual decisions over decorative effects.
 
-## Architecture
+## Runtime-first architecture
 
 ```text
 User brief
   ↓
-Brief classifier
+Intent + constraints
   ↓
-Core design adapters
+Design decision engine
   ├─ Taste
   ├─ UI UX Pro Max
-  ├─ Design MD
-  ├─ Impeccable
-  └─ shadcn
+  └─ Design MD
   ↓
-Problem classification
+UX / visual audit
+  └─ Impeccable
   ↓
-Supporting resource router
+System + component mapping
+  └─ shadcn / project primitives
+  ↓
+Problem-specific resource router
   ├─ Motion Sites
   ├─ React Bits
   ├─ Uiverse
   ├─ Anime.js
   └─ Aceternity UI
   ↓
-Semantic prompt extraction
+Prompt compiler + implementation plan
   ↓
-Project-native implementation
+Responsive + motion decisions
   ↓
-QA + refinement
+Implementation
+  ↓
+QA + repair loop
 ```
 
-Adapter contracts live in `adapters/`. Routing guidance lives in `references/adapter-routing.md`.
+Runtime contracts live in `runtime/`. Adapter contracts live in `adapters/`. Routing guidance lives in `references/`.
 
 ## Core adapters
 
@@ -70,16 +74,17 @@ Use only when the current UI problem warrants them.
 
 ## Adapter selection protocol
 
-For every request, classify the problem before selecting a resource.
+For every request:
 
-1. Identify the user's primary goal.
-2. Determine whether the problem is visual, UX, structural, component-level, motion, or polish.
+1. Extract intent, constraints, existing stack, and acceptance criteria.
+2. Classify the problem as visual, UX, structure, component, motion, responsive, or polish.
 3. Select the minimum core adapters needed.
-4. Select supporting adapters only for unresolved UI problems.
+4. Select supporting adapters only for unresolved problems.
 5. Score candidates from 0–3 for semantic, visual, implementation, performance, and accessibility fit.
-6. Keep the smallest set that sufficiently solves the problem.
-7. Translate external references into project-native guidance.
-8. Reject references that conflict with the design system, accessibility, performance, or product goal.
+6. Reject candidates below the threshold or those that introduce unnecessary complexity.
+7. Compile selected references into project-native instructions.
+8. Implement using existing project primitives before adding dependencies.
+9. Run the QA gate and repair the highest-impact failures first.
 
 Never select a resource solely because the user mentioned its library.
 
@@ -97,8 +102,9 @@ Extract:
 - responsive requirements
 - interaction/motion requirements
 - accessibility/performance constraints
+- explicit non-goals
 
-Infer conservatively when non-critical information is missing.
+Infer conservatively when non-critical information is missing. Do not invent brand requirements.
 
 ### Phase 1 — Establish design direction
 
@@ -115,7 +121,7 @@ Use Taste + UI UX Pro Max + Design MD responsibilities to define:
 - responsive behavior
 - anti-patterns to avoid
 
-Do not start by selecting random components.
+Produce decisions before component selection.
 
 ### Phase 2 — UX and visual audit
 
@@ -169,10 +175,6 @@ For every selected external reference, output only:
 
 Do not reproduce large portions of third-party source code or proprietary prompt collections.
 
-Example:
-
-> Use a restrained spotlight interaction for the hero card. Pointer proximity subtly shifts a low-opacity radial highlight while content remains stable. Disable the effect under `prefers-reduced-motion`. Prefer CSS variables or a lightweight pointer handler over a new animation dependency.
-
 ### Phase 6 — Implement
 
 Default target:
@@ -190,19 +192,27 @@ Priority:
 6. motion
 7. micro-polish
 
-### Phase 7 — Quality gate
+### Phase 7 — Quality gate + repair loop
 
-Verify:
-- no generic/template-looking sections unless requested
-- no excessive gradients/glows/cards
-- no gratuitous animation
-- no broken responsive layout
-- no inaccessible contrast or focus states
-- no missing product states
-- no animation that blocks task completion
-- reduced-motion behavior exists where motion is meaningful
-- sensible component reuse
-- maintainable code
+Evaluate five dimensions: UX clarity, visual coherence, implementation quality, accessibility, and performance. Record failures as concrete defects, rank them by impact, repair the top issues, then re-run the gate.
+
+A task is not complete merely because the page renders. It is complete when the primary task is clear, the system is coherent, critical states work, responsive behavior is intentional, and motion does not create accessibility or performance regressions.
+
+See `runtime/qa-engine.md` and `references/evaluation-rubric.md`.
+
+## Anti-slop rules
+
+Reject or simplify patterns that are generic by default:
+- excessive gradient backgrounds
+- repeated glass cards without semantic need
+- oversized hero typography without hierarchy
+- decorative blobs/glows competing with content
+- animation on every element
+- arbitrary rounded corners and shadows
+- icon-only actions without accessible names
+- duplicated component variants with no behavioral difference
+
+A distinctive interface should come from composition, typography, spacing, color, content hierarchy, and intentional interaction—not from piling on effects.
 
 ## Motion rules
 
@@ -213,7 +223,7 @@ Motion must have a job:
 - **Emphasis** — directs attention.
 - **Atmosphere** — optional and sparse.
 
-Prefer subtle, composable motion. Avoid stacking parallax + cursor effects + glow + blur + text animation in one viewport unless the brief explicitly calls for an experimental showcase.
+Prefer subtle, composable motion. Avoid stacking parallax + cursor effects + glow + blur + text animation in one viewport unless the brief explicitly calls for an experimental showcase. Respect `prefers-reduced-motion` and preserve task completion without animation.
 
 ## Output contract
 
@@ -223,8 +233,9 @@ For a design/implementation plan return:
 3. Component/system map
 4. Selected adapters/references and why
 5. Motion plan
-6. Implementation plan
-7. Quality checklist
+6. Responsive plan
+7. Implementation plan
+8. QA risks and acceptance criteria
 
 When implementing directly, keep reasoning compact and prioritize working code.
 
@@ -236,3 +247,4 @@ When implementing directly, keep reasoning compact and prioritize working code.
 - Preserve accessibility and reduced-motion behavior.
 - Prefer existing project dependencies over new ones.
 - Adapt external references instead of blindly copying them.
+- Optimize for the final interface, not the number of tools called.
